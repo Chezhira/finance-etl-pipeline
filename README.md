@@ -2,15 +2,14 @@
 *(Monthly Close Dataset)*
 
 <p align="center">
-  <a href="https://github.com/Chezhira/Finance-ETL-Pipeline-Monthly-Close-Dataset-">
-    <img src="https://github.com/Chezhira/Finance-ETL-Pipeline-Monthly-Close-Dataset-" alt="CI Status">
+  <a href="https://github.com/Chezhira/Finance-ETL-Pipeline-Monthly-Close-Dataset">
+    <img src="https://img.shields.io/badge/Chez%20Solutions-Project-blue?style=flat-square" alt="Chez Solutions">
   </a>
-  https://img.shields.io/badge/Chez%20Solutions-Project-blue?style=flat-square
-  https://img.shields.io/badge/Python-3.10%20|%203.11%20|%203.12-blue?logo=python
-  LICENSEhttps://img.shields.io/badge/License-MIT-green.svg</a>
-  https://github.com/astral-sh/ruffhttps://img.shields.io/badge/Lint-Ruff-4B8BBE?logo=python</a>
-  https://github.com/psf/blackhttps://img.shields.io/badge/Format-Black-000000</a>
-  https://pre-commit.com/https://img.shields.io/badge/hooks-pre--commit-FFB000?logo=pre-commit</a>
+  <img src="https://img.shields.io/badge/Python-3.10%20|%203.11%20|%203.12-blue?logo=python" alt="Python Versions">
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License">
+  <img src="https://img.shields.io/badge/Lint-Ruff-4B8BBE?logo=python" alt="Lint Ruff">
+  <img src="https://img.shields.io/badge/Format-Black-000000" alt="Format Black">
+  <img src="https://img.shields.io/badge/hooks-pre--commit-FFB000?logo=pre-commit" alt="Pre-commit Hooks">
 </p>
 
 ---
@@ -47,12 +46,6 @@ flowchart LR
 
 ---
 
-## 🔄 CI/CD Workflow
-
-*(Details of GitHub Actions workflow go here)*
-
----
-
 ## 🚀 Quickstart
 
 ```bash
@@ -73,8 +66,44 @@ finance-etl run --month 2025-12
 
 ---
 
-## 📜 Data Contracts
+## 🔄 How to Run (Cross-Platform)
 
+### **Linux/macOS**
+Use the provided **Makefile**:
+```bash
+make setup        # Install dependencies
+make lint         # Lint code
+make format       # Format code
+make test         # Run tests
+make run MONTH=2025-12  # Run ETL for December 2025
+```
+
+### **Windows**
+Use the PowerShell task runner:
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .	asks.ps1 setup
+powershell -NoProfile -ExecutionPolicy Bypass -File .	asks.ps1 lint
+powershell -NoProfile -ExecutionPolicy Bypass -File .	asks.ps1 run -Month 2025-12
+```
+
+---
+
+## 🎯 Demo Workflow (Job Showcase)
+1. **Generate synthetic data**:
+   ```powershell
+   powershell -File .	asks.ps1 data -Month 2025-12
+   ```
+2. **Run ETL pipeline**:
+   ```powershell
+   powershell -File .	asks.ps1 run -Month 2025-12
+   ```
+3. **Check outputs**:
+   - `data/curated/*.parquet`
+   - `data/output/*.csv` (Star schema for BI tools)
+
+---
+
+## 📜 Data Contracts
 * **fact_transactions.parquet** → GL transactions
 * **dim_accounts.parquet** → Chart of accounts
 * **kpi_monthly.parquet** → KPI metrics
@@ -82,7 +111,6 @@ finance-etl run --month 2025-12
 ---
 
 ## ✅ Data Quality Controls
-
 * Null checks
 * Referential integrity (entity/account keys)
 * KPI consistency checks
@@ -90,18 +118,15 @@ finance-etl run --month 2025-12
 ---
 
 ## 📊 Outputs & KPIs
-
 * **Star schema CSVs:** `dim_date.csv`, `dim_month.csv`, `dim_entity.csv`, `dim_account.csv`, `fact_gl.csv`, `fact_kpi_monthly.csv`
 * KPIs: Revenue, Expense, Gross Margin %, Operating Margin %
 
 ---
 
 ## 🤝 Contributing
-
 Pull requests are welcome!Run `pre-commit run --all-files` before committing to keep CI green.
 
 ---
 
 ## 📄 License
-
 MIT License © 2026 Chez Solutions
