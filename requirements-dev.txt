@@ -1,0 +1,4 @@
+﻿pytest
+# Add more test tools here if needed, e.g.:
+# pytest-cov
+# typer[all]
