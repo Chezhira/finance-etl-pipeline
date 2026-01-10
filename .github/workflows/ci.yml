@@ -1,15 +1,16 @@
-name: CI
+﻿name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main, feat/pr1-packaging-cli-docs ]
   pull_request:
-    branches: [ "main" ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,14 +18,14 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
 
-      - name: Install package + deps
+      - name: Install package and test deps
         run: |
           python -m pip install --upgrade pip
           pip install -e .
           pip install pytest
 
       - name: Run tests
-        run: |
-          pytest -q
+        run: pytest -q
