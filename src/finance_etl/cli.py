@@ -1,55 +1,35 @@
-from __future__ import annotations
 
-from pathlib import Path
-import pandas as pd
-import typer
-from rich import print as rprint
+from typer import Typer, Option
 
-from .config import settings
-from .pipeline import run_month
-
-app = typer.Typer(help="Monthly Finance ETL + DQ checks + curated Parquet datasets")
-
-@app.command("hello")
-def hello(name: str = "Zahidah"):
-    rprint(f"[bold green]Hello {name}![/bold green] CLI wiring works ?")
-
-def _print_dq_summary(path: Path) -> None:
-    if not path.exists():
-        return
-    try:
-        df = pd.read_csv(path)
-    except Exception:
-        return
-
-    # PASS file has different columns
-    if "status" in df.columns:
-        rprint(f"[bold green]DQ status:[/bold green] {df.loc[0,'status']}")
-        return
-
-    if df.empty:
-        rprint("[bold green]DQ summary:[/bold green] no issues")
-        return
-
-    rprint("[bold yellow]DQ summary (issues):[/bold yellow]")
-    for _, row in df.iterrows():
-        rprint(f" - {row['dataset']} | {row['severity']} | {int(row['issue_count'])}")
+# Force a multi-command app (group) and show help when no args are given
+app = Typer(help="Finance ETL CLI", no_args_is_help=True, add_completion=False)
 
 @app.command("run")
-def run(
-    month: str = typer.Option(..., help="Month to process in YYYY-MM format, e.g. 2025-12"),
-    raw_dir: Path = typer.Option(Path("data/raw"), help="Path to raw CSV folder"),
-    curated_dir: Path = typer.Option(Path("data/curated"), help="Path to curated output folder"),
-    reference_dir: Path = typer.Option(Path("data/reference"), help="Path to reference datasets"),
-    fail_on: str = typer.Option("ERROR", help="DQ fail threshold: ERROR | WARN | NEVER"),
+def run_cmd(
+    month: str = Option(..., "--month", "-m", help="Target month, e.g., 2025-12"),
+    fail_on: str = Option("ERROR", "--fail-on", help="DQ strictness: ERROR|WARN|NEVER"),
 ):
-    outputs = run_month(settings, month, raw_dir, curated_dir, reference_dir, fail_on=fail_on)
+    """
+    Run the monthly-close pipeline.
 
-    _print_dq_summary(outputs["dq_summary"])
+    Example:
+      finance-etl run --month 2025-12 --fail-on WARN
+    """
+    # TODO: wire up your real pipeline here
+    # from finance_etl.pipeline import run_pipeline
+    # run_pipeline(month=month, fail_on=fail_on)
+    print(f"Running ETL for month={month}, fail_on={fail_on}")
 
-    rprint("[bold green]ETL complete[/bold green]")
-    for k, v in outputs.items():
-        rprint(f" - {k}: {v}")
+@app.command("version")
+def version_cmd():
+    """Show CLI version (placeholder to keep multi-command layout)."""
+    try:
+        # If you set version in pyproject, you can read it dynamically:
+        from importlib.metadata import version
+        print("finance-etl", version("finance-etl"))
+    except Exception:
+        print("finance-etl 0.1.0")
 
 if __name__ == "__main__":
+    # Running as a module or script should now show a COMMANDS section.
     app()
