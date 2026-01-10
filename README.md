@@ -1,5 +1,4 @@
 # Finance ETL Pipeline
-*(Monthly Close Dataset)*
 
 <p align="center">
   <a href="https://github.com/Chezhira/Finance-ETL-Pipeline-Monthly-Close-Dataset">
