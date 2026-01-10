@@ -1,43 +1,60 @@
+
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "finance-etl-pipeline"
+name = "finance-etl"
 version = "0.1.0"
-description = "Monthly Finance ETL + Data Quality checks + curated dashboard dataset"
-requires-python = ">=3.11"
+description = "Monthly-close ETL with data quality controls and curated outputs."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Zahidah Murira" }]
+license = { text = "MIT" }
+keywords = ["ETL", "finance", "monthly close", "data quality"]
+# Keep deps minimal; expand as your code requires
 dependencies = [
-  "pandas>=2.2",
-  "pyarrow>=16.0",
-  "pandera>=0.20",
-  "typer>=0.12",
-  "rich>=13.0",
-  "pydantic>=2.6",
+  "pandas>=2.1",
+  "pyarrow>=14.0",
+  "numpy>=1.26",
+  "python-dateutil>=2.8.2",
+  "typer[all]>=0.12",      # for CLI
+  "pandera>=0.20",         # for schema-based DQ (PR-2 will use this)
+  "pydantic>=2.7"          # for configs/contracts if needed
 ]
 
-[project.optional-dependencies]
-dev = [
-  "pytest>=8.0",
-  "ruff>=0.6",
-]
+[project.urls]
+Homepage = "https://github.com/Chezhira/Finance-ETL-Pipeline-Monthly-Close-Dataset-"
+Issues = "https://github.com/Chezhira/Finance-ETL-Pipeline-Monthly-Close-Dataset-/issues"
 
 [project.scripts]
+# Exposes `finance-etl` on PATH after install
 finance-etl = "finance_etl.cli:app"
 
-[tool.setuptools]
-package-dir = {"" = "src"}
-
-[tool.setuptools.packages.find]
-where = ["src"]
+# ---------- Tooling (all optional but recommended) ----------
+[tool.black]
+line-length = 100
+target-version = ["py310"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py310"
+select = ["E","F","I","B","UP"]
+ignore = ["E203"]           # if you prefer Black-compatible slicing rules
+exclude = ["data","dist",".venv","venv",".git"]
 
-[tool.ruff.lint]
-select = ["E", "F", "I", "B", "UP"]
-ignore = ["E501"]
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true
+exclude = "data|dist|.venv|venv|.git"
 
 [tool.pytest.ini_options]
+minversion = "7.0"
 testpaths = ["tests"]
+addopts = "-q"
+
+# (Optional) coverage if you wire it up in CI later
+[tool.coverage.run]
+branch = true
+source = ["src/finance_etl"]
