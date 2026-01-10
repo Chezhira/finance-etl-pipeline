@@ -1,7 +1,11 @@
 # **Finance ETL Pipeline**  
 *(Monthly Close Dataset)*  
 
-[![CI](https://github.com/ziddm/finance-etl-pipeline/actions/work
+<!-- Badges -->
+![CI](https://github.com/ziddm/finance-etl-pipeline/actions/work
+!Chez Solutions
+![Python](https://img.shields.io/bmg.shields.io/badge/License-MIT-green.svg
+
 
 Portfolio-grade data engineering mini-project producing validated, curated **Parquet datasets** for dashboards and FP&A.
 
